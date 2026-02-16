@@ -1,0 +1,56 @@
+@use 'theme/variables' as *;
+@use 'theme/mixins' as *;
+
+.decoder-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.decoder-block {
+  display: flex;
+  align-items: center;
+  background: var(--ion-card-background);
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.letter-box {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: 900;
+  border-radius: 8px;
+  margin-right: 16px;
+  color: black;
+}
+
+.pace-color { background: var(--pm-color-pace); }
+.sense-color { background: var(--pm-color-sense); color: white; }
+.response-color { background: var(--ion-color-secondary); }
+
+.info {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  @include text-label;
+  font-size: 0.7rem;
+}
+
+.value {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.connector {
+  height: 16px;
+  width: 2px;
+  background: var(--ion-color-step-200);
+  margin-left: 41px; /* Uitlijnen met midden van letterbox */
+}

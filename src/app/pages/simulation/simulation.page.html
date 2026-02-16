@@ -1,0 +1,78 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Pacemaker Simulator</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="realismMode = !realismMode">
+        <ion-icon
+          [name]="realismMode ? 'flask' : 'flask-outline'"
+          [color]="realismMode ? 'warning' : 'medium'">
+        </ion-icon>
+      </ion-button>
+
+      <ion-button (click)="isRunning = !isRunning">
+        <ion-icon [name]="isRunning ? 'pause' : 'play'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <div class="monitor-frame">
+
+    <div class="monitor-label">
+      LEAD I – Pacemaker Training Mode
+    </div>
+
+    <div *ngIf="eventLabel" class="event-overlay">
+      {{ eventLabel }}
+    </div>
+
+    <div class="canvas-container">
+      <canvas #ecgCanvas></canvas>
+    </div>
+
+  </div>
+
+
+  <div class="pm-card">
+    <div class="pm-row">
+      <span class="pm-label">Lower Rate Limit</span>
+      <span class="pm-value">{{ bpm }} ppm</span>
+    </div>
+    <ion-range min="30" max="120" step="5" [(ngModel)]="bpm"></ion-range>
+  </div>
+
+  <div class="pm-card">
+    <div class="pm-row">
+      <span class="pm-label">Output</span>
+      <span class="pm-value">{{ output }} mA</span>
+    </div>
+    <ion-range min="0" max="10" step="0.5" [(ngModel)]="output"></ion-range>
+  </div>
+
+  <div class="pm-card">
+    <div class="pm-row">
+      <span class="pm-label">Sensitivity</span>
+      <span class="pm-value">{{ sensitivity }} mV</span>
+    </div>
+    <ion-range min="0.5" max="5" step="0.1" [(ngModel)]="sensitivity"></ion-range>
+  </div>
+
+  <div class="pm-card-interactive action-button" (click)="startThresholdTest()">
+  <ion-icon name="pulse"></ion-icon>
+  <div>
+    <b>Capture Threshold Test</b><br>
+    <small>Verhoog output tot capture terugkomt</small>
+  </div>
+</div>
+
+
+</ion-content>

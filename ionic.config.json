@@ -1,0 +1,7 @@
+{
+  "name": "pacemaker-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

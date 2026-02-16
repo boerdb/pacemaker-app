@@ -1,0 +1,13 @@
+@use 'theme/variables' as *;
+@use 'theme/mixins' as *;
+
+.mode-badge {
+  background: var(--ion-color-step-150);
+  color: var(--ion-color-primary);
+  font-weight: 800;
+  padding: 8px 12px;
+  border-radius: 8px;
+  min-width: 60px;
+  text-align: center;
+  border: 1px solid var(--ion-color-primary);
+}

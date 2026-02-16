@@ -1,0 +1,70 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Instellingen</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <div class="pm-card">
+    <div style="text-align: center; padding: 20px;">
+      <ion-icon name="heart" style="font-size: 48px; color: var(--pm-color-atrium);"></ion-icon>
+      <h2 style="margin: 10px 0 5px 0;">PaceMaster Pro</h2>
+      <p class="text-subtle">Medical Training Assistant</p>
+      <div style="margin-top: 15px;">
+        <span style="background: var(--ion-color-step-150); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">
+          v{{ appVersion }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Applicatie Status</div>
+
+  <div class="pm-card-interactive" (click)="checkForUpdates()">
+    <div class="pm-row" style="border: none;">
+      <div style="display: flex; align-items: center;">
+        <ion-icon name="cloud-download" slot="start" style="margin-right: 12px;"></ion-icon>
+        <div>
+          <div style="font-weight: bold;">Check voor updates</div>
+          <div class="text-subtle">Forceer server check</div>
+        </div>
+      </div>
+      <ion-icon name="chevron-forward" color="medium"></ion-icon>
+    </div>
+  </div>
+
+<div class="pm-card-interactive"
+       *ngIf="pwaService.installPrompt()"
+       (click)="installPwa()"
+       style="border: 2px solid var(--ion-color-primary);">
+
+    <div class="pm-row" style="border: none;">
+      <div style="display: flex; align-items: center;">
+        <div style="background: var(--ion-color-primary); border-radius: 50%; padding: 8px; margin-right: 12px;">
+           <ion-icon name="download" style="color: white;"></ion-icon>
+        </div>
+        <div>
+          <div style="font-weight: bold; color: var(--ion-color-primary);">Installeer App</div>
+          <div class="text-subtle">Toevoegen aan startscherm</div>
+        </div>
+      </div>
+      <ion-icon name="chevron-forward" color="primary"></ion-icon>
+    </div>
+  </div>
+
+
+  <div class="section-title">Juridisch</div>
+
+  <div class="pm-card" style="border-left: 4px solid var(--ion-color-warning);">
+    <h3><ion-icon name="warning" color="warning"></ion-icon> Disclaimer</h3>
+    <p style="font-size: 0.9rem; color: var(--ion-color-step-600); line-height: 1.4;">
+      Deze applicatie is uitsluitend bedoeld voor <strong>educatieve doeleinden</strong>.
+      Gebruik deze app nooit voor klinische besluitvorming of het instellen van actieve implantaten bij patiënten.
+    </p>
+  </div>
+
+</ion-content>

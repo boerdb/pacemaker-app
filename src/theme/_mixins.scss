@@ -1,0 +1,107 @@
+/* src/theme/_mixins.scss */
+
+/* =========================================
+   PACEMASTER MIXINS
+   Herbruikbare bouwblokken voor UI consistentie
+   ========================================= */
+
+// 1. CARDS & CONTAINERS
+// --------------------------------------------------
+
+/* Standaard Card: Zwevend blok op donkere achtergrond */
+@mixin pm-card {
+  background: var(--ion-card-background);
+  border-radius: 16px; /* Modern, rond */
+  padding: 20px;
+  margin-bottom: 16px;
+
+  /* Subtiele glow/shadow voor diepte in dark mode */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05); /* Lichte rand voor definitie */
+
+  position: relative;
+  overflow: hidden;
+}
+
+/* Interactieve Card: Voor klikbare lijsten/opties */
+@mixin pm-card-interactive {
+  @include pm-card;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+
+  &:active {
+    transform: scale(0.98);
+    background: var(--ion-color-step-100);
+  }
+}
+
+// 2. TYPOGRAFIE & DATA
+// --------------------------------------------------
+
+/* Grote waardes (bijv. '60' bij BPM) */
+@mixin text-value-hero {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ion-text-color);
+}
+
+/* Labels bij waardes (bijv. 'Lower Rate Limit') */
+@mixin text-label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--ion-color-medium);
+  margin-bottom: 4px;
+  display: block;
+}
+
+/* Eenheid (bijv. 'bpm', 'ms') */
+@mixin text-unit {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--ion-color-medium);
+  margin-left: 4px;
+}
+
+// 3. UI ELEMENTEN
+// --------------------------------------------------
+
+/* Status bolletje (bijv. groen voor OK, rood voor error) */
+@mixin status-dot($color: var(--ion-color-success)) {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: $color;
+  box-shadow: 0 0 8px $color; /* Geeft een 'led' glow effect */
+  margin-right: 8px;
+}
+
+/* Flexbox helper: Alles perfect in het midden */
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Flexbox helper: Space between (Links tekst, rechts waarde) */
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// 4. SPECIFIEK VOOR PACEMAKER
+// --------------------------------------------------
+
+/* Achtergrond grid voor ECG grafieken */
+@mixin ecg-grid-bg {
+  background-size: 20px 20px;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}

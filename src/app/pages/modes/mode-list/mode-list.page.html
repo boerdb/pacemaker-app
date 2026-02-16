@@ -1,0 +1,31 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Pacemaker Modi</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <div class="section-title">Veelgebruikt</div>
+
+  <div *ngFor="let m of modes"
+       class="pm-card-interactive"
+       [routerLink]="['/modes/mode-detail', m.id]">
+
+    <div class="pm-row" style="border:none; padding-bottom: 0;">
+      <div style="display:flex; align-items:center;">
+        <div class="mode-badge">{{ m.id }}</div>
+        <div style="margin-left: 12px;">
+          <span class="pm-label" style="margin-bottom: 0;">{{ m.name }}</span>
+          <span class="text-subtle" style="font-size: 0.8rem; display:block;">{{ m.desc }}</span>
+        </div>
+      </div>
+      <ion-icon name="chevron-forward" color="medium"></ion-icon>
+    </div>
+
+  </div>
+
+</ion-content>

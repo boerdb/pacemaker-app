@@ -1,0 +1,55 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/modes/mode-list"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ modeId }} Analyse</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <div class="decoder-container">
+    <div class="decoder-block">
+      <div class="letter-box pace-color">{{ pos1.code }}</div>
+      <div class="info">
+        <span class="label">Pacing (Stimulatie)</span>
+        <span class="value">{{ pos1.meaning }}</span>
+      </div>
+    </div>
+
+    <div class="connector"></div>
+
+    <div class="decoder-block">
+      <div class="letter-box sense-color">{{ pos2.code }}</div>
+      <div class="info">
+        <span class="label">Sensing (Detectie)</span>
+        <span class="value">{{ pos2.meaning }}</span>
+      </div>
+    </div>
+
+    <div class="connector"></div>
+
+    <div class="decoder-block">
+      <div class="letter-box response-color">{{ pos3.code }}</div>
+      <div class="info">
+        <span class="label">Response (Reactie)</span>
+        <span class="value">{{ pos3.meaning }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pm-card" style="margin-top: 24px;">
+    <h2>Klinische Uitleg</h2>
+    <p style="color: var(--ion-color-step-600); line-height: 1.5;">
+      In de <strong>{{ modeId }}</strong> modus wordt er gestimuleerd in
+      <span style="color:white">{{ pos1.meaning }}</span>.
+      Tegelijkertijd kijkt de pacemaker naar activiteit in <span style="color:white">{{ pos2.meaning }}</span>.
+      <br><br>
+      Als er een eigen hartslag wordt gezien, dan is de reactie:
+      <strong style="color: var(--ion-color-primary)">{{ pos3.meaning }}</strong>
+      ({{ pos3.area }}).
+    </p>
+  </div>
+
+</ion-content>
