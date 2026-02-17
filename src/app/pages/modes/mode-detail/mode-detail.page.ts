@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mode-detail',
@@ -12,6 +13,8 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ModeDetailPage implements OnInit {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
   modeId: string = '';
 
   // Decoded letters
@@ -57,4 +60,11 @@ export class ModeDetailPage implements OnInit {
       area: 'Wat doet hij bij detectie?'
     };
   }
+
+
+ openSimulator() {
+  this.router.navigate(['/simulation'], {
+    state: { mode: this.modeId }
+  });
+}
 }

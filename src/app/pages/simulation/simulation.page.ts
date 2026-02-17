@@ -2,8 +2,9 @@ import { Component, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, ViewDidEnter } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { pause, play, walk, bicycle, flask, flaskOutline, pulse } from 'ionicons/icons';
+import { pause, play, flask, flaskOutline, pulse } from 'ionicons/icons';
 
 @Component({
   selector: 'app-simulation',
@@ -20,28 +21,35 @@ export class SimulationPage implements ViewDidEnter, OnDestroy {
   output = 5;
   sensitivity = 2;
 
+  mode: 'SIM' | 'VVI' | 'VOO' | 'AAI' | 'DDD' = 'SIM';
+
   isRunning = true;
-  realismMode = true;
-
   eventLabel = '';
-  private eventTimeout: any;
 
+  // Threshold test
+  isTesting = false;
+  private testInterval: any;
+  private captureThreshold = 3.5;
+
+  private eventTimeout: any;
   private ctx!: CanvasRenderingContext2D;
   private animationFrameId: any;
   private dataPoints: number[] = [];
-  private lastBeatTime = 0;
   private beatQueue: number[] = [];
+  private lastBeatTime = 0;
 
   private highlightSpike = false;
   private highlightQRS = false;
+realismMode: any;
 
-  // threshold test
-  private captureThreshold = 4;
-  private thresholdTestActive = false;
-  private thresholdCaptured = false;
+  constructor(private router: Router) {
 
-  constructor() {
-    addIcons({ pause, play, walk, bicycle, flask, flaskOutline, pulse });
+    const nav = this.router.getCurrentNavigation();
+    if (nav?.extras?.state?.['mode']) {
+      this.mode = nav.extras.state['mode'];
+    }
+
+    addIcons({ pause, play, flask, flaskOutline, pulse });
   }
 
   ionViewDidEnter() {
@@ -52,9 +60,57 @@ export class SimulationPage implements ViewDidEnter, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.isRunning = false;
+    this.stopTest();
     if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
   }
+
+  // ======================
+  // Threshold test logic
+  // ======================
+
+  toggleThresholdTest() {
+
+    if (this.isTesting) {
+      this.stopTest();
+      return;
+    }
+
+    this.showEvent('THRESHOLD TEST STARTED');
+
+    this.isTesting = true;
+    this.output = 5.0;
+
+    // nieuwe random threshold per test
+    this.captureThreshold = 3 + Math.random() * 2;
+
+    const interval = (60000 / this.bpm) * 2;
+
+    this.testInterval = setInterval(() => {
+
+      this.output -= 0.5;
+      this.output = Math.round(this.output * 10) / 10;
+
+      if (this.output <= 0) {
+        this.stopTest();
+      }
+
+    }, interval);
+  }
+
+  stopTest() {
+
+    if (this.testInterval) {
+      clearInterval(this.testInterval);
+      this.testInterval = null;
+    }
+
+    this.isTesting = false;
+    this.showEvent('TEST STOPPED');
+  }
+
+  // ======================
+  // Canvas + loop
+  // ======================
 
   private initCanvas() {
     const canvas = this.canvasRef.nativeElement;
@@ -68,8 +124,8 @@ export class SimulationPage implements ViewDidEnter, OnDestroy {
     const context = canvas.getContext('2d');
     if (context) {
       this.ctx = context;
-      const middle = canvas.height / 2;
-      this.dataPoints = new Array(canvas.width).fill(middle);
+      const mid = canvas.height / 2;
+      this.dataPoints = new Array(canvas.width).fill(mid);
     }
   }
 
@@ -89,8 +145,8 @@ export class SimulationPage implements ViewDidEnter, OnDestroy {
     const baseInterval = 60000 / this.bpm;
     const intervalMs = baseInterval + (Math.random() - 0.5) * 120;
 
-    const middle = this.canvasRef.nativeElement.height / 2;
-    let newValue = middle;
+    const mid = this.canvasRef.nativeElement.height / 2;
+    let newValue = mid;
 
     if (timestamp - this.lastBeatTime > intervalMs) {
       this.decideBeatType(timestamp);
@@ -99,7 +155,7 @@ export class SimulationPage implements ViewDidEnter, OnDestroy {
     this.dataPoints.shift();
 
     if (this.beatQueue.length > 0) {
-      newValue = this.beatQueue.shift() || middle;
+      newValue = this.beatQueue.shift() || mid;
     }
 
     newValue += (Math.random() - 0.5) * 1.2;
@@ -110,68 +166,142 @@ export class SimulationPage implements ViewDidEnter, OnDestroy {
     this.dataPoints.push(newValue);
   }
 
+  // ======================
+  // Beat logic
+  // ======================
+
   private decideBeatType(time: number) {
 
     this.lastBeatTime = time;
 
-    // threshold test actief?
-    if (this.thresholdTestActive) {
-
+    // Threshold test override
+    if (this.isTesting) {
       if (this.output >= this.captureThreshold) {
         this.triggerPace();
         this.flashSpike();
-
-        if (!this.thresholdCaptured) {
-          this.showEvent(`CAPTURE RESTORED (≈ ${this.captureThreshold.toFixed(1)} mA)`);
-          this.thresholdCaptured = true;
-        }
       } else {
         this.captureFailure();
         this.flashSpike();
         this.showEvent('LOSS OF CAPTURE');
       }
-
       return;
     }
 
-    // normaal gedrag
-    const intrinsicBeatOccurs = Math.random() > (this.sensitivity / 5);
+    switch (this.mode) {
 
-    if (intrinsicBeatOccurs) {
-      this.sensedBeat();
-      this.flashQRS();
-      this.showEvent('SENSED BEAT');
-      return;
+      case 'SIM': {
+
+        const intrinsicRate = this.bpm - 5 + Math.random() * 10;
+        const rateDiff = Math.abs(intrinsicRate - this.bpm);
+
+        if (intrinsicRate > this.bpm) {
+          this.sensedBeat();
+          this.flashQRS();
+          this.showEvent('SENSED BEAT');
+          return;
+        }
+
+        if (rateDiff < 3) {
+          const r = Math.random();
+
+          if (r < 0.35) {
+            this.fusionBeat();
+            this.flashQRS();
+            this.showEvent('FUSION BEAT');
+            return;
+          }
+
+          if (r < 0.5) {
+            this.pseudoFusionBeat();
+            this.flashQRS();
+            this.showEvent('PSEUDOFUSION');
+            return;
+          }
+        }
+
+        if (this.output < 3 || Math.random() < 0.12) {
+          this.captureFailure();
+          this.flashSpike();
+          this.showEvent('LOSS OF CAPTURE');
+          return;
+        }
+
+        this.triggerPace();
+        this.flashSpike();
+        this.showEvent('VENTRICULAR PACING');
+        return;
+      }
+
+      case 'VOO':
+        this.triggerPace();
+        this.flashSpike();
+        this.showEvent('ASYNC PACING');
+        return;
+
+      case 'VVI': {
+
+        const intrinsicBeatOccurs = Math.random() > (this.sensitivity / 3);
+
+        if (intrinsicBeatOccurs) {
+          this.sensedBeat();
+          this.flashQRS();
+          this.showEvent('SENSED BEAT');
+          return;
+        }
+
+        this.triggerPace();
+        this.flashSpike();
+        this.showEvent('VENTRICULAR PACING');
+        return;
+      }
+
+      case 'AAI': {
+
+        const intrinsicBeatOccurs = Math.random() > 0.5;
+
+        if (intrinsicBeatOccurs) {
+          this.sensedBeat();
+          this.flashQRS();
+          this.showEvent('ATRIAL SENSED');
+        } else {
+          this.atrialPace();
+          this.flashSpike();
+          this.showEvent('ATRIAL PACING');
+        }
+        return;
+      }
+
+      case 'DDD': {
+
+        const intrinsicAtrial = Math.random() > 0.4;
+
+        if (intrinsicAtrial) {
+          this.sensedBeat();
+          this.flashQRS();
+          this.showEvent('ATRIAL SENSED');
+        } else {
+          this.atrialPace();
+          this.flashSpike();
+          this.showEvent('ATRIAL PACING');
+        }
+
+        setTimeout(() => {
+          if (Math.random() > 0.5) {
+            this.triggerPace();
+            this.flashSpike();
+            this.showEvent('VENTRICULAR PACING');
+          }
+        }, 120);
+
+        return;
+      }
     }
-
-    if (this.output < 3) {
-      this.captureFailure();
-      this.flashSpike();
-      this.showEvent('LOSS OF CAPTURE');
-      return;
-    }
-
-    this.triggerPace();
-    this.flashSpike();
-    this.showEvent('VENTRICULAR PACING');
-  }
-
-  // knop
-  startThresholdTest() {
-    this.captureThreshold = 3 + Math.random() * 3; // 3–6 mA
-    this.thresholdTestActive = true;
-    this.thresholdCaptured = false;
-    this.showEvent('THRESHOLD TEST – INCREASE OUTPUT');
   }
 
   private showEvent(text: string) {
     this.eventLabel = text;
-
-    if (this.eventTimeout) clearTimeout(this.eventTimeout);
-
-    this.eventTimeout = setTimeout(() => {
-      this.eventLabel = '';
-    }, 1800);
+    clearTimeout(this.eventTimeout);
+    this.eventTimeout = setTimeout(() => this.eventLabel = '', 1500);
   }
 
   private flashSpike() {
@@ -182,6 +312,22 @@ export class SimulationPage implements ViewDidEnter, OnDestroy {
   private flashQRS() {
     this.highlightQRS = true;
     setTimeout(() => this.highlightQRS = false, 150);
+  }
+
+  // ======================
+  // ECG morphology
+  // ======================
+
+  private pushTWave(mid: number) {
+    const tAmp = 16 + Math.random() * 4;
+    this.beatQueue.push(mid - tAmp * 0.2);
+    this.beatQueue.push(mid - tAmp * 0.5);
+    this.beatQueue.push(mid - tAmp * 0.8);
+    this.beatQueue.push(mid - tAmp);
+    this.beatQueue.push(mid - tAmp * 0.9);
+    this.beatQueue.push(mid - tAmp * 0.6);
+    this.beatQueue.push(mid - tAmp * 0.3);
+    this.beatQueue.push(mid);
   }
 
   private triggerPace() {
@@ -202,25 +348,13 @@ export class SimulationPage implements ViewDidEnter, OnDestroy {
     this.beatQueue.push(mid + 10);
     this.beatQueue.push(mid);
 
-    for (let i = 0; i < 6; i++) this.beatQueue.push(mid - 2);
+    for (let i = 0; i < 8; i++) this.beatQueue.push(mid);
 
-    this.beatQueue.push(mid - 5);
-    this.beatQueue.push(mid - 18);
-    this.beatQueue.push(mid - 8);
-    this.beatQueue.push(mid);
-  }
-
-  private captureFailure() {
-    const mid = this.canvasRef.nativeElement.height / 2;
-
-    this.beatQueue.push(mid - 120);
-    this.beatQueue.push(mid + 120);
-    this.beatQueue.push(mid);
-
-    for (let i = 0; i < 20; i++) this.beatQueue.push(mid);
+    this.pushTWave(mid);
   }
 
   private sensedBeat() {
+
     const mid = this.canvasRef.nativeElement.height / 2;
 
     this.beatQueue.push(mid - 2);
@@ -228,7 +362,7 @@ export class SimulationPage implements ViewDidEnter, OnDestroy {
     this.beatQueue.push(mid - 4);
     this.beatQueue.push(mid);
 
-    for (let i = 0; i < 8; i++) this.beatQueue.push(mid);
+    for (let i = 0; i < 5; i++) this.beatQueue.push(mid);
 
     this.beatQueue.push(mid + 5);
     this.beatQueue.push(mid - 20);
@@ -237,12 +371,32 @@ export class SimulationPage implements ViewDidEnter, OnDestroy {
     this.beatQueue.push(mid + 15);
     this.beatQueue.push(mid);
 
-    for (let i = 0; i < 8; i++) this.beatQueue.push(mid - 1);
+    for (let i = 0; i < 14; i++) this.beatQueue.push(mid);
 
-    this.beatQueue.push(mid - 5);
-    this.beatQueue.push(mid - 20);
-    this.beatQueue.push(mid - 6);
+    this.pushTWave(mid);
+  }
+
+  private fusionBeat() { this.triggerPace(); }
+  private pseudoFusionBeat() { this.triggerPace(); }
+
+  private atrialPace() {
+    const mid = this.canvasRef.nativeElement.height / 2;
+    this.beatQueue.push(mid - 60);
+    this.beatQueue.push(mid + 60);
     this.beatQueue.push(mid);
+    this.beatQueue.push(mid - 2);
+    this.beatQueue.push(mid - 8);
+    this.beatQueue.push(mid - 4);
+    this.beatQueue.push(mid);
+    this.pushTWave(mid);
+  }
+
+  private captureFailure() {
+    const mid = this.canvasRef.nativeElement.height / 2;
+    this.beatQueue.push(mid - 120);
+    this.beatQueue.push(mid + 120);
+    this.beatQueue.push(mid);
+    for (let i = 0; i < 20; i++) this.beatQueue.push(mid);
   }
 
   private draw() {

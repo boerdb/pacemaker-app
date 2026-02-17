@@ -82,3 +82,20 @@
   border-radius: 12px;
   margin: 16px 0;
 }
+/* --- GLOBAL FIXES --- */
+
+/* 1. Zorg dat de app NIET onder de statusbalk kruipt */
+ion-header {
+  padding-top: env(safe-area-inset-top) !important;
+  background: #000; /* Zorg dat de header zelf zwart is */
+}
+
+ion-toolbar {
+  --background: #000; /* Zwarte achtergrond voor de balk */
+}
+
+/* 2. Forceer dat scrollen ALTIJD mag */
+ion-content {
+  --overflow: auto !important;
+  --background: #000;
+}

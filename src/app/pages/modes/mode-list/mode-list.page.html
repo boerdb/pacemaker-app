@@ -9,6 +9,14 @@
 
 <ion-content class="ion-padding">
 
+  <ion-button expand="block"
+            fill="outline"
+            (click)="openSimulator()"
+            style="margin-bottom:16px;">
+  Ga naar simulator
+</ion-button>
+
+
   <div class="section-title">Veelgebruikt</div>
 
   <div *ngFor="let m of modes"

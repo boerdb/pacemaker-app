@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-mode-list',
@@ -10,6 +12,12 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, IonicModule, RouterModule]
 })
 export class ModeListPage {
+  constructor(private router: Router) {}
+
+  openSimulator() {
+  this.router.navigate(['/simulation'], { state: { mode: 'SIM' } });
+}
+
   // De data voor onze lijst
   modes = [
     { id: 'VVI', name: 'Ventricular Demand', desc: 'Pacet alleen in de kamer als er geen eigen ritme is.', risk: 'Laag' },

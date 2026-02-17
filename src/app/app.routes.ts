@@ -3,13 +3,18 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard', // <--- HIER ZAT HET PROBLEEM (was 'home')
+    redirectTo: 'landing', // <--- HIER DE WIJZIGING (Was 'dashboard')
     pathMatch: 'full',
+  },
+  {
+    path: 'landing',
+    loadComponent: () => import('./pages/landing/landing.page').then( m => m.LandingPage)
   },
   {
     path: 'dashboard',
     loadComponent: () => import('./pages/dashboard/dashboard.page').then( m => m.DashboardPage)
   },
+  // ... hieronder staan je settings, simulation en mode-list routes, die laat je staan
   {
     path: 'settings',
     loadComponent: () => import('./pages/settings/settings.page').then( m => m.SettingsPage)

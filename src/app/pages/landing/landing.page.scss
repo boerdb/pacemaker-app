@@ -1,0 +1,75 @@
+.landing-content {
+  --background: #050505;
+}
+
+/* Achtergrond (mag blijven, maar met pointer-events none) */
+.tech-background {
+  position: fixed; /* Fixed zorgt dat hij niet mee scrollt */
+  top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none; /* KLIKBAARHEID FIX */
+  background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+}
+
+.grid-overlay {
+  /* ... plak hier je oude grid code als je die mooi vond ... */
+  /* Of laat leeg voor rustig zwart */
+}
+
+/* DE GROTE SCHOONMAAK: Flexbox Layout */
+.hero-content {
+  position: relative;
+  z-index: 10;
+  min-height: 100%; /* Vul minstens het hele scherm */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Alles in het midden */
+  align-items: center;
+  padding: 40px 20px; /* Ruime marges */
+  gap: 30px; /* 30px ruimte tussen ELK onderdeel (voorkomt overlap!) */
+}
+
+.logo-container {
+  display: flex; flex-direction: column; align-items: center;
+}
+
+ion-icon.logo-icon {
+  font-size: 64px;
+  color: var(--ion-color-primary);
+  margin-bottom: 10px;
+}
+
+h1 {
+  font-size: 2.5rem; margin: 0; color: white; text-align: center;
+  .pro-badge {
+    font-size: 0.8rem; background: var(--ion-color-primary); color: black;
+    padding: 2px 6px; border-radius: 4px; vertical-align: middle;
+  }
+}
+
+p {
+  text-align: center; color: #ccc; max-width: 300px; line-height: 1.5; margin: 0;
+}
+
+/* De knoppen container */
+.button-group {
+  width: 100%;
+  display: flex; flex-direction: column; align-items: center; gap: 15px;
+  margin-top: 20px;
+}
+
+.main-btn {
+  width: 100%; max-width: 300px; height: 55px;
+  --background: var(--ion-color-primary); --color: black; font-weight: bold;
+  font-size: 1.1rem; --border-radius: 50px;
+}
+
+.sub-btn {
+  width: 100%; max-width: 300px; color: #888;
+}
+
+.footer-info {
+  margin-top: auto; /* Duw footer helemaal naar beneden als er ruimte is */
+  text-align: center; color: #444; font-size: 0.75rem;
+  padding-top: 20px;
+}
