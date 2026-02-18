@@ -1,80 +1,40 @@
-/*
- * App Global CSS
- * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
- */
+/* 1. Importeer je mixins & variabelen */
+@use 'theme/variables' as *;
+@use 'theme/mixins' as *;
 
-/* Core CSS required for Ionic components to work properly */
 @import "@ionic/angular/css/core.css";
-
-/* Basic CSS for apps built with Ionic */
 @import "@ionic/angular/css/normalize.css";
 @import "@ionic/angular/css/structure.css";
 @import "@ionic/angular/css/typography.css";
 @import "@ionic/angular/css/display.css";
-
-/* Optional CSS utils that can be commented out */
 @import "@ionic/angular/css/padding.css";
 @import "@ionic/angular/css/float-elements.css";
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
-
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+/* Dark mode imports */
 @import '@ionic/angular/css/palettes/dark.system.css';
-/* src/global.scss */
 
-/* 1. Importeer je mixins */
-@import 'theme/variables';
-@import 'theme/mixins';
-
-/* 2. Maak Utility Classes (zodat je ze in HTML kunt gebruiken) */
-
-.pm-card {
-  @include pm-card;
-}
-
-.pm-card-interactive {
-  @include pm-card-interactive;
-}
-
-.pm-value {
-  @include text-value-hero;
-}
-
-.pm-label {
-  @include text-label;
-}
+/* 2. Utility Classes */
+.pm-card { @include pm-card; }
+.pm-card-interactive { @include pm-card-interactive; }
+.pm-value { @include text-value-hero; }
+.pm-label { @include text-label; }
 
 .pm-row {
   @include flex-between;
   padding: 8px 0;
   border-bottom: 1px solid var(--ion-color-step-100);
-
   &:last-child {
     border-bottom: none;
   }
 }
 
-/* Specifieke status dots classes */
 .dot-ok { @include status-dot(var(--ion-color-success)); }
 .dot-warn { @include status-dot(var(--ion-color-warning)); }
 .dot-pace { @include status-dot(var(--pm-color-pace)); }
 
-/* Container voor ECG */
 .ecg-container {
   @include ecg-grid-bg;
   height: 200px;
@@ -82,20 +42,44 @@
   border-radius: 12px;
   margin: 16px 0;
 }
-/* --- GLOBAL FIXES --- */
 
-/* 1. Zorg dat de app NIET onder de statusbalk kruipt */
+/* ==================================================================
+   GLOBAL FIXES & OVERRIDES
+   ================================================================== */
+
+/* --- RODE HEADER & APPLE NOTCH FIX --- */
 ion-header {
-  padding-top: env(safe-area-inset-top) !important;
-  background: #000; /* Zorg dat de header zelf zwart is */
+  background-color: var(--pm-header-red) !important;
+  border: none !important;
 }
 
 ion-toolbar {
-  --background: #000; /* Zwarte achtergrond voor de balk */
+  --background: var(--pm-header-red) !important;
+  --color: #ffffff !important;
+  --border-width: 0 !important;
+
+  /* Dit rekt de header op zodat hij ONDER de batterij en tijd doorloopt */
+  padding-top: var(--ion-safe-area-top, 0px) !important;
+  min-height: calc(56px + var(--ion-safe-area-top, 0px)) !important;
 }
 
-/* 2. Forceer dat scrollen ALTIJD mag */
-ion-content {
-  --overflow: auto !important;
-  --background: #000;
+/* Zorg dat alle knoppen, pijltjes en tekst wit zijn */
+ion-toolbar ion-title,
+ion-toolbar ion-icon,
+ion-toolbar ion-buttons,
+ion-toolbar ion-button,
+ion-toolbar ion-back-button {
+  color: #ffffff !important;
+  --color: #ffffff !important;
+}
+
+ion-toolbar {
+  --background: var(--pm-header-red) !important;
+  --color: #ffffff !important;
+  --border-width: 0 !important;
+
+  /* Zorg altijd voor een padding, of er nu een notch is of niet */
+  padding-top: var(--ion-safe-area-top, 10px) !important;
+  /* Forceer een minimale dikte van 60px! */
+  min-height: calc(60px + var(--ion-safe-area-top, 0px)) !important;
 }

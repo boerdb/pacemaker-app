@@ -11,3 +11,26 @@
   text-align: center;
   border: 1px solid var(--ion-color-primary);
 }
+/* --- RODE HEADER FIX VOOR DEZE PAGINA --- */
+ion-header {
+  background-color: var(--pm-header-red) !important;
+  border: none !important;
+}
+
+ion-toolbar {
+  --background: var(--pm-header-red) !important;
+  --color: #ffffff !important;
+  --border-width: 0 !important;
+
+  /* Forceer de padding en minimale hoogte zodat hij niet meer smal is! */
+  padding-top: var(--ion-safe-area-top, 10px) !important;
+  min-height: calc(60px + var(--ion-safe-area-top, 0px)) !important;
+}
+
+/* Witte tekst en iconen forceren */
+ion-toolbar ion-title,
+ion-toolbar ion-icon,
+ion-toolbar ion-back-button {
+  color: #ffffff !important;
+  --color: #ffffff !important;
+}

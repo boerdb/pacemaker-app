@@ -38,9 +38,13 @@ export const APP_ICONS = {
   // Pacemaker Specifiek
   'pacing': flash,          // Voor de elektrische puls
   'sensing': wifi,          // Voor het 'luisteren' van de lead
+  'wifi': wifi,             // Wifi-icoon (voor connectie)
   'monitoring': analytics,  // Voor grafieken/ECG
   'battery': batteryCharging,
+  'battery-charging': batteryCharging,
   'mode': medkit,           // VVI/DDD icoon
+  'pulse': pulse,
+  'medkit': medkit,
 
   // Status Meldingen
   'success': checkmarkCircle,

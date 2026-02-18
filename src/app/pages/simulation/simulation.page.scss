@@ -5,6 +5,23 @@
 ion-content {
   --padding-bottom: 120px !important;
 }
+/* --- DE LOKALE FIXES VOOR IOS --- */
+ion-content {
+  --overflow: auto;
+  --padding-bottom: 120px; /* Ruimte om te scrollen */
+}
+
+ion-range {
+  /* Sliders zichtbaar maken op Apple */
+  padding: 15px 10px;
+  --bar-background: #444444;
+  --bar-background-active: var(--ion-color-primary);
+  --knob-background: #ffffff;
+  --knob-size: 26px;
+  --knob-box-shadow: 0 0 5px rgba(255,255,255,0.5);
+}
+
+
 
 .monitor-frame {
   background: black;
@@ -21,27 +38,28 @@ ion-content {
   position: absolute; top: 10px; left: 10px;
   color: var(--ion-color-primary); font-family: monospace; font-weight: bold;
   opacity: 0.7; pointer-events: none;
+  z-index: 10;
+}
+
+.event-overlay {
+  position: absolute;
+  top: 35px;
+  left: 10px;
+  background: rgba(0,0,0,0.7);
+  color: var(--ion-color-warning);
+  font-family: monospace;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  z-index: 9;
 }
 
 .canvas-container {
   height: 220px; width: 100%; @include ecg-grid-bg;
 }
 
-/* --- NIEUW: DIT REPAREERT JE ONZICHTBARE SLIDERS --- */
-ion-range {
-  padding: 15px 10px;
 
-  /* De balk wordt donkergrijs (zodat je hem ziet op zwart) */
-  --bar-background: #505050 !important;
-
-  /* Het actieve deel wordt jouw app-kleur */
-  --bar-background-active: var(--ion-color-primary) !important;
-
-  /* De knop wordt WIT (anders zie je hem niet) */
-  --knob-background: #ffffff !important;
-  --knob-size: 26px !important;
-  --knob-box-shadow: 0 0 5px rgba(255,255,255,0.5);
-}
 
 /* De kaarten om de sliders heen */
 .pm-card {
@@ -66,3 +84,20 @@ ion-range {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   padding: 30px; margin-top: 20px; border-radius: 12px;
 }
+/* Zorg dat de content kan scrollen */
+ion-content {
+  --overflow: auto;
+  --padding-bottom: 120px; /* Ruimte onderaan voor de iOS balk */
+}
+
+/* Jouw Slider Zichtbaarheid Fix */
+ion-range {
+  padding: 15px 10px;
+  --bar-background: #444444;
+  --bar-background-active: var(--ion-color-primary);
+  --knob-background: #ffffff;
+  --knob-size: 26px;
+  --knob-box-shadow: 0 0 5px rgba(255,255,255,0.5);
+}
+
+/* Rest van je simulation CSS (monitor-frame, kaarten, etc) behouden zoals je had */

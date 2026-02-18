@@ -2,39 +2,26 @@
   --background: #050505;
 }
 
-/* Achtergrond (mag blijven, maar met pointer-events none) */
-.tech-background {
-  position: fixed; /* Fixed zorgt dat hij niet mee scrollt */
-  top: 0; left: 0; width: 100%; height: 100%;
-  z-index: 0;
-  pointer-events: none; /* KLIKBAARHEID FIX */
-  background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
-}
-
-.grid-overlay {
-  /* ... plak hier je oude grid code als je die mooi vond ... */
-  /* Of laat leeg voor rustig zwart */
-}
-
-/* DE GROTE SCHOONMAAK: Flexbox Layout */
 .hero-content {
   position: relative;
   z-index: 10;
-  min-height: 100%; /* Vul minstens het hele scherm */
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Alles in het midden */
+  justify-content: center;
   align-items: center;
-  padding: 40px 20px; /* Ruime marges */
-  gap: 30px; /* 30px ruimte tussen ELK onderdeel (voorkomt overlap!) */
+  padding: 40px 20px;
+  gap: 25px;
 }
 
 .logo-container {
-  display: flex; flex-direction: column; align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 ion-icon.logo-icon {
-  font-size: 64px;
+  font-size: 60px;
   color: var(--ion-color-primary);
   margin-bottom: 10px;
 }
@@ -47,29 +34,26 @@ h1 {
   }
 }
 
-p {
-  text-align: center; color: #ccc; max-width: 300px; line-height: 1.5; margin: 0;
-}
+p { text-align: center; color: #ccc; max-width: 320px; line-height: 1.5; margin: 0; }
 
-/* De knoppen container */
 .button-group {
-  width: 100%;
-  display: flex; flex-direction: column; align-items: center; gap: 15px;
-  margin-top: 20px;
+  width: 100%; display: flex; flex-direction: column; align-items: center; gap: 15px;
 }
 
-.main-btn {
-  width: 100%; max-width: 300px; height: 55px;
-  --background: var(--ion-color-primary); --color: black; font-weight: bold;
-  font-size: 1.1rem; --border-radius: 50px;
+/* De knop styling veilig lokaal gezet */
+ion-button.main-btn {
+  width: 100%; max-width: 280px; height: 50px;
+  --background: var(--ion-color-primary);
+  --color: black;
+  font-weight: bold;
+  --border-radius: 50px;
 }
 
-.sub-btn {
-  width: 100%; max-width: 300px; color: #888;
+ion-button.sub-btn {
+  --color: #888888;
 }
 
 .footer-info {
-  margin-top: auto; /* Duw footer helemaal naar beneden als er ruimte is */
-  text-align: center; color: #444; font-size: 0.75rem;
-  padding-top: 20px;
+  margin-top: auto;
+  text-align: center; color: #555; font-size: 0.75rem; padding-top: 20px;
 }

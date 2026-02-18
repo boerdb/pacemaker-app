@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router'; // Nodig voor de knop naar dashboard
+import { RouterModule } from '@angular/router';
+// 1. We importeren de specifieke Ionic modules vanuit 'standalone'
+import { IonContent, IonButton, IonIcon } from '@ionic/angular/standalone';
+// 2. We importeren de specifieke iconen
 import { addIcons } from 'ionicons';
 import { heart, arrowForward, settings } from 'ionicons/icons';
 
@@ -10,13 +12,12 @@ import { heart, arrowForward, settings } from 'ionicons/icons';
   templateUrl: './landing.page.html',
   styleUrls: ['./landing.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, RouterModule] // RouterModule zorgt dat routerLink werkt
+  // 3. We zetten ze hier in de imports array, zodat de compiler ze NIET kan verwijderen!
+  imports: [CommonModule, RouterModule, IonContent, IonButton, IonIcon]
 })
 export class LandingPage {
-
   constructor() {
-    // We registreren de iconen die we in de CSS-versie gebruiken
+    // 4. Iconen registreren
     addIcons({ heart, arrowForward, settings });
   }
-
 }

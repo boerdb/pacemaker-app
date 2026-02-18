@@ -1,8 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { ActivatedRoute } from '@angular/router';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+
+// 1. Importeer de iconen
+import { addIcons } from 'ionicons';
+import { chevronBack, arrowBack } from 'ionicons/icons';
 
 @Component({
   selector: 'app-mode-detail',
@@ -31,6 +34,11 @@ export class ModeDetailPage implements OnInit {
     'T': { mean: 'Triggered', area: 'Vuurt puls bij detectie' }
   };
 
+  constructor() {
+    // 2. Registreer de back-iconen
+    addIcons({ chevronBack, arrowBack });
+  }
+
   ngOnInit() {
     this.modeId = this.route.snapshot.paramMap.get('id') || 'VOO';
     this.decodeMode(this.modeId);
@@ -38,33 +46,14 @@ export class ModeDetailPage implements OnInit {
 
   decodeMode(code: string) {
     const chars = code.split('');
-
-    // Positie 1: Pacing
-    this.pos1 = {
-      code: chars[0],
-      meaning: this.definitions[chars[0]]?.mean || 'Unknown',
-      area: 'Waar wordt gestimuleerd?'
-    };
-
-    // Positie 2: Sensing
-    this.pos2 = {
-      code: chars[1],
-      meaning: this.definitions[chars[1]]?.mean || 'Unknown',
-      area: 'Waar wordt geluisterd?'
-    };
-
-    // Positie 3: Response
-    this.pos3 = {
-      code: chars[2],
-      meaning: this.definitions[chars[2]]?.mean || 'Unknown',
-      area: 'Wat doet hij bij detectie?'
-    };
+    this.pos1 = { code: chars[0], meaning: this.definitions[chars[0]]?.mean || 'Unknown', area: 'Waar wordt gestimuleerd?' };
+    this.pos2 = { code: chars[1], meaning: this.definitions[chars[1]]?.mean || 'Unknown', area: 'Waar wordt geluisterd?' };
+    this.pos3 = { code: chars[2], meaning: this.definitions[chars[2]]?.mean || 'Unknown', area: 'Wat doet hij bij detectie?' };
   }
 
-
- openSimulator() {
-  this.router.navigate(['/simulation'], {
-    state: { mode: this.modeId }
-  });
-}
+  openSimulator() {
+    this.router.navigate(['/simulation'], {
+      state: { mode: this.modeId }
+    });
+  }
 }

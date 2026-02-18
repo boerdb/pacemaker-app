@@ -8,7 +8,7 @@
   <base href="/"/>
 
   <meta name="color-scheme" content="light dark"/>
-  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="format-detection" content="telephone=no"/>
   <meta name="msapplication-tap-highlight" content="no"/>
 
@@ -19,7 +19,36 @@
   <meta name="mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
   <link rel="manifest" href="manifest.webmanifest">
+
+  <script>
+  // Aggressively force stylesheet to load immediately
+  document.addEventListener('DOMContentLoaded', function() {
+    const links = document.querySelectorAll('link[media="print"]');
+    links.forEach(link => {
+      link.media = 'all';
+    });
+  }, false);
+
+  // Also try immediately if DOM is already loaded
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    const links = document.querySelectorAll('link[media="print"]');
+    links.forEach(link => {
+      link.media = 'all';
+    });
+  }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+  <script>
+    if (window.location.hostname !== 'localhost') {
+      eruda.init();
+      console.log('Mobile Debugger geactiveerd!');
+    }
+  </script>
 </head>
+
+
+
 
 <body>
   <app-root></app-root>

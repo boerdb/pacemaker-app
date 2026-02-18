@@ -7,19 +7,6 @@
 
     <ion-title>Pacemaker Simulator</ion-title>
 
-    <ion-buttons slot="end">
-      <ion-button (click)="realismMode = !realismMode">
-        <ion-icon
-          [name]="realismMode ? 'flask' : 'flask-outline'"
-          [color]="realismMode ? 'warning' : 'medium'">
-        </ion-icon>
-      </ion-button>
-
-      <ion-button (click)="isRunning = !isRunning">
-        <ion-icon [name]="isRunning ? 'pause' : 'play'"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-
   </ion-toolbar>
 </ion-header>
 
@@ -28,8 +15,8 @@
   <div class="monitor-frame">
 
     <div class="monitor-label">
-  LEAD I — {{ realismMode ? 'Clinical mode' : 'Basic mode' }} {{ mode }}
-</div>
+      LEAD I — {{ mode }}
+    </div>
 
     <div *ngIf="eventLabel" class="event-overlay">
       {{ eventLabel }}
@@ -41,7 +28,7 @@
 
   </div>
 
-
+  <!-- RATE -->
   <div class="pm-card">
     <div class="pm-row">
       <span class="pm-label">Lower Rate Limit</span>
@@ -50,6 +37,7 @@
     <ion-range min="30" max="120" step="5" [(ngModel)]="bpm"></ion-range>
   </div>
 
+  <!-- OUTPUT -->
   <div class="pm-card">
     <div class="pm-row">
       <span class="pm-label">Output</span>
@@ -58,6 +46,7 @@
     <ion-range min="0" max="10" step="0.5" [(ngModel)]="output"></ion-range>
   </div>
 
+  <!-- SENSITIVITY -->
   <div class="pm-card">
     <div class="pm-row">
       <span class="pm-label">Sensitivity</span>
@@ -66,13 +55,24 @@
     <ion-range min="0.5" max="5" step="0.1" [(ngModel)]="sensitivity"></ion-range>
   </div>
 
-  <div class="pm-card-interactive action-button" (click)="toggleThresholdTest()">
-  <ion-icon name="pulse"></ion-icon>
-  <div>
-    <b>Capture Threshold Test</b><br>
-    <small>Verhoog output tot capture terugkomt</small>
-  </div>
-</div>
+  <!-- THRESHOLD TEST -->
+  <div class="pm-card-interactive action-button"
+       (click)="toggleThresholdTest()"
+       [style.border-color]="isTesting ? 'var(--ion-color-danger)' : 'var(--pm-color-atrium)'">
 
+    <ion-icon [name]="isTesting ? 'square' : 'pulse'"
+              [class.beat-anim]="isTesting"></ion-icon>
+
+    <div>
+      <b *ngIf="!isTesting">Start Capture Threshold Test</b>
+      <b *ngIf="isTesting" style="color: var(--ion-color-danger);">
+        STOP TEST ({{ output }} V)
+      </b>
+      <br>
+      <small *ngIf="!isTesting">Output wordt automatisch verlaagd</small>
+      <small *ngIf="isTesting">Test loopt… kijk naar ECG</small>
+    </div>
+
+  </div>
 
 </ion-content>

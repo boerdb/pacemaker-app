@@ -10,13 +10,23 @@
   3. Centrale UI elementen
 */
 
+// For information on how to create your own theme, please refer to:
+// https://ionicframework.com/docs/theming/
+/* src/theme/variables.scss */
+
+/* ------------------------------------------------------------------
+  PACEMASTER THEME CONFIGURATION
+  ------------------------------------------------------------------
+*/
+
 :root {
+  /* HIER STAAT JOUW NIEUWE RODE HEADER KLEUR! */
+  --pm-header-red: #C8102E;
+
   /**
    * 1. BRAND COLORS (Ionic Defaults overridden)
    * ---------------------------------------------------------------
    */
-
-  /* Primary: Een scherpe 'Medical Tech' blauw */
   --ion-color-primary: #3880ff;
   --ion-color-primary-rgb: 56, 128, 255;
   --ion-color-primary-contrast: #ffffff;
@@ -24,7 +34,6 @@
   --ion-color-primary-shade: #3171e0;
   --ion-color-primary-tint: #4c8dff;
 
-  /* Secondary: Teal (voor neutrale acties) */
   --ion-color-secondary: #3dc2ff;
   --ion-color-secondary-rgb: 61, 194, 255;
   --ion-color-secondary-contrast: #ffffff;
@@ -32,7 +41,6 @@
   --ion-color-secondary-shade: #36abe0;
   --ion-color-secondary-tint: #50c8ff;
 
-  /* Danger: Critical Alerts (Batterij leeg, Lead breuk) */
   --ion-color-danger: #eb445a;
   --ion-color-danger-rgb: 235, 68, 90;
   --ion-color-danger-contrast: #ffffff;
@@ -40,51 +48,37 @@
   --ion-color-danger-shade: #cf3c4f;
   --ion-color-danger-tint: #ed576b;
 
-  /* Warning: Let op */
   --ion-color-warning: #ffc409;
   --ion-color-warning-rgb: 255, 196, 9;
   --ion-color-warning-contrast: #000000;
   --ion-color-warning-contrast-rgb: 0, 0, 0;
 
-  /* Success: Alles OK */
   --ion-color-success: #2fdf75;
   --ion-color-success-rgb: 47, 223, 117;
   --ion-color-success-contrast: #000000;
   --ion-color-success-contrast-rgb: 0, 0, 0;
 
-
   /**
    * 2. PACEMAKER SPECIFIC SEMANTICS
-   * Gebruik deze variabelen in je componenten!
    * ---------------------------------------------------------------
    */
-
-  /* Anatomie */
-  --pm-color-atrium: #ff4961;       /* Roze/Rood voor Atriale events */
-  --pm-color-ventricle: #2fdf75;    /* Groen voor Ventriculaire events */
-
-  /* Signalen */
-  --pm-color-pace: #ffc409;         /* De elektrische puls (Spike) - Geel/Oranje */
-  --pm-color-sense: #3880ff;        /* Het waargenomen eigen ritme - Blauw */
-  --pm-color-noise: #808080;        /* Ruis / Storing */
-
-  /* Grafieken & Data */
-  --pm-chart-grid: #333333;         /* Gridlijnen in ECG */
-  --pm-chart-line: #00ff00;         /* De klassieke ECG monitor lijn */
-
+  --pm-color-atrium: #ff4961;
+  --pm-color-ventricle: #2fdf75;
+  --pm-color-pace: #ffc409;
+  --pm-color-sense: #3880ff;
+  --pm-color-noise: #808080;
+  --pm-chart-grid: #333333;
+  --pm-chart-line: #00ff00;
 
   /**
    * 3. APPLICATION BACKGROUNDS (FORCED DARK)
-   * Dit forceert de app in dark mode, ongeacht systeeminstelling.
    * ---------------------------------------------------------------
    */
-  --ion-background-color: #121212; /* Diep donkergrijs (beter dan puur zwart) */
+  --ion-background-color: #121212;
   --ion-background-color-rgb: 18, 18, 18;
-
   --ion-text-color: #ffffff;
   --ion-text-color-rgb: 255, 255, 255;
 
-  /* Step colors (voor lijsten en cards) */
   --ion-color-step-50: #1e1e1e;
   --ion-color-step-100: #2a2a2a;
   --ion-color-step-150: #363636;
@@ -105,7 +99,6 @@
   --ion-color-step-900: #e7e7e7;
   --ion-color-step-950: #f3f3f3;
 
-  /* Card Specifiek */
   --ion-card-background: #1e1e1e;
   --ion-item-background: #121212;
   --ion-toolbar-background: #1f1f1f;

@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
-import { Router } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 
+// 1. Importeer de iconen expliciet
+import { addIcons } from 'ionicons';
+import { chevronBack, arrowBack } from 'ionicons/icons';
 
 @Component({
   selector: 'app-mode-list',
@@ -12,11 +14,17 @@ import { Router } from '@angular/router';
   imports: [CommonModule, IonicModule, RouterModule]
 })
 export class ModeListPage {
-  constructor(private router: Router) {}
+  // Gebruik de moderne inject() methode
+  private router = inject(Router);
+
+  constructor() {
+    // 2. Registreer de back-iconen zodat de compiler ze niet weggooit
+    addIcons({ chevronBack, arrowBack });
+  }
 
   openSimulator() {
-  this.router.navigate(['/simulation'], { state: { mode: 'SIM' } });
-}
+    this.router.navigate(['/simulation'], { state: { mode: 'SIM' } });
+  }
 
   // De data voor onze lijst
   modes = [

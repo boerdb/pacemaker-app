@@ -1,37 +1,42 @@
 import { Component, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule, ViewDidEnter } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+
+// 1. Expliciete imports voor standalone
+import {
+  IonContent, IonHeader, IonToolbar, IonTitle,
+  IonButtons, IonButton, IonIcon, IonBackButton, IonRange
+} from '@ionic/angular/standalone';
+
 import { addIcons } from 'ionicons';
-import { pause, play, flask, flaskOutline, pulse } from 'ionicons/icons';
+// 2. Iconen registreren
+import { pause, play, flask, flaskOutline, pulse, chevronBack, arrowBack, square } from 'ionicons/icons';
 
 @Component({
   selector: 'app-simulation',
   templateUrl: './simulation.page.html',
   styleUrls: ['./simulation.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, FormsModule]
+  imports: [
+    CommonModule, FormsModule,
+    IonContent, IonHeader, IonToolbar, IonTitle,
+    IonButtons, IonIcon, IonBackButton, IonRange
+  ]
 })
-export class SimulationPage implements ViewDidEnter, OnDestroy {
-
+export class SimulationPage implements OnDestroy {
   @ViewChild('ecgCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
 
   bpm = 60;
   output = 5;
   sensitivity = 2;
 
-  mode: 'SIM' | 'VVI' | 'VOO' | 'AAI' | 'DDD' = 'SIM';
-
+  // DOO is hier netjes toegevoegd aan de types
+  mode: 'SIM' | 'VVI' | 'VOO' | 'AAI' | 'DDD' | 'DOO' = 'SIM';
   isRunning = true;
   eventLabel = '';
-
-  // Threshold test
-  isTesting = false;
-  private testInterval: any;
-  private captureThreshold = 3.5;
-
   private eventTimeout: any;
+
   private ctx!: CanvasRenderingContext2D;
   private animationFrameId: any;
   private dataPoints: number[] = [];
@@ -40,18 +45,22 @@ export class SimulationPage implements ViewDidEnter, OnDestroy {
 
   private highlightSpike = false;
   private highlightQRS = false;
-realismMode: any;
+  realismMode: any;
+  isTesting: any;
+  captureThreshold: number = 0;
+  testInterval: any;
+rate: any;
 
   constructor(private router: Router) {
-
     const nav = this.router.getCurrentNavigation();
     if (nav?.extras?.state?.['mode']) {
       this.mode = nav.extras.state['mode'];
     }
 
-    addIcons({ pause, play, flask, flaskOutline, pulse });
+    addIcons({ pause, play, flask, flaskOutline, pulse, chevronBack, arrowBack, square });
   }
 
+  // JOUW geniale fix voor Ionic canvas sizing!
   ionViewDidEnter() {
     setTimeout(() => {
       this.initCanvas();
@@ -69,41 +78,33 @@ realismMode: any;
   // ======================
 
   toggleThresholdTest() {
-
     if (this.isTesting) {
       this.stopTest();
       return;
     }
 
     this.showEvent('THRESHOLD TEST STARTED');
-
     this.isTesting = true;
     this.output = 5.0;
 
-    // nieuwe random threshold per test
     this.captureThreshold = 3 + Math.random() * 2;
-
     const interval = (60000 / this.bpm) * 2;
 
     this.testInterval = setInterval(() => {
-
       this.output -= 0.5;
       this.output = Math.round(this.output * 10) / 10;
 
       if (this.output <= 0) {
         this.stopTest();
       }
-
     }, interval);
   }
 
   stopTest() {
-
     if (this.testInterval) {
       clearInterval(this.testInterval);
       this.testInterval = null;
     }
-
     this.isTesting = false;
     this.showEvent('TEST STOPPED');
   }
@@ -141,7 +142,6 @@ realismMode: any;
   }
 
   private updatePhysics(timestamp: number) {
-
     const baseInterval = 60000 / this.bpm;
     const intervalMs = baseInterval + (Math.random() - 0.5) * 120;
 
@@ -171,7 +171,6 @@ realismMode: any;
   // ======================
 
   private decideBeatType(time: number) {
-
     this.lastBeatTime = time;
 
     // Threshold test override
@@ -188,9 +187,7 @@ realismMode: any;
     }
 
     switch (this.mode) {
-
       case 'SIM': {
-
         const intrinsicRate = this.bpm - 5 + Math.random() * 10;
         const rateDiff = Math.abs(intrinsicRate - this.bpm);
 
@@ -203,14 +200,12 @@ realismMode: any;
 
         if (rateDiff < 3) {
           const r = Math.random();
-
           if (r < 0.35) {
             this.fusionBeat();
             this.flashQRS();
             this.showEvent('FUSION BEAT');
             return;
           }
-
           if (r < 0.5) {
             this.pseudoFusionBeat();
             this.flashQRS();
@@ -239,16 +234,13 @@ realismMode: any;
         return;
 
       case 'VVI': {
-
         const intrinsicBeatOccurs = Math.random() > (this.sensitivity / 3);
-
         if (intrinsicBeatOccurs) {
           this.sensedBeat();
           this.flashQRS();
           this.showEvent('SENSED BEAT');
           return;
         }
-
         this.triggerPace();
         this.flashSpike();
         this.showEvent('VENTRICULAR PACING');
@@ -256,9 +248,7 @@ realismMode: any;
       }
 
       case 'AAI': {
-
         const intrinsicBeatOccurs = Math.random() > 0.5;
-
         if (intrinsicBeatOccurs) {
           this.sensedBeat();
           this.flashQRS();
@@ -271,10 +261,24 @@ realismMode: any;
         return;
       }
 
+      // HIER IS DE DOO MODUS TOEGEVOEGD!
+      case 'DOO': {
+        // 1. Pace blind in het Atrium
+        this.atrialPace();
+        this.flashSpike();
+        this.showEvent('A-PACE (DOO)');
+
+        // 2. Wacht 150ms (AV-delay) en pace dan blind in het Ventrikel
+        setTimeout(() => {
+          this.triggerPace();
+          this.flashSpike();
+          this.showEvent('V-PACE (DOO)');
+        }, 150);
+        return;
+      }
+
       case 'DDD': {
-
         const intrinsicAtrial = Math.random() > 0.4;
-
         if (intrinsicAtrial) {
           this.sensedBeat();
           this.flashQRS();
@@ -292,7 +296,6 @@ realismMode: any;
             this.showEvent('VENTRICULAR PACING');
           }
         }, 120);
-
         return;
       }
     }
@@ -332,14 +335,11 @@ realismMode: any;
 
   private triggerPace() {
     const mid = this.canvasRef.nativeElement.height / 2;
-
     this.beatQueue.push(mid - 120);
     this.beatQueue.push(mid + 120);
     this.beatQueue.push(mid);
-
     this.beatQueue.push(mid);
     this.beatQueue.push(mid);
-
     this.beatQueue.push(mid + 20);
     this.beatQueue.push(mid + 70);
     this.beatQueue.push(mid + 90);
@@ -347,32 +347,24 @@ realismMode: any;
     this.beatQueue.push(mid + 30);
     this.beatQueue.push(mid + 10);
     this.beatQueue.push(mid);
-
     for (let i = 0; i < 8; i++) this.beatQueue.push(mid);
-
     this.pushTWave(mid);
   }
 
   private sensedBeat() {
-
     const mid = this.canvasRef.nativeElement.height / 2;
-
     this.beatQueue.push(mid - 2);
     this.beatQueue.push(mid - 10);
     this.beatQueue.push(mid - 4);
     this.beatQueue.push(mid);
-
     for (let i = 0; i < 5; i++) this.beatQueue.push(mid);
-
     this.beatQueue.push(mid + 5);
     this.beatQueue.push(mid - 20);
     this.beatQueue.push(mid - 65);
     this.beatQueue.push(mid - 30);
     this.beatQueue.push(mid + 15);
     this.beatQueue.push(mid);
-
     for (let i = 0; i < 14; i++) this.beatQueue.push(mid);
-
     this.pushTWave(mid);
   }
 
@@ -400,7 +392,6 @@ realismMode: any;
   }
 
   private draw() {
-
     if (!this.ctx) return;
 
     const w = this.canvasRef.nativeElement.width;
