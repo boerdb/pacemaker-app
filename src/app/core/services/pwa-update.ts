@@ -1,7 +1,7 @@
-import { Injectable, ApplicationRef, signal } from '@angular/core';
-import { SwUpdate } from '@angular/service-worker';
-import { ToastController, Platform } from '@ionic/angular';
-import { first } from 'rxjs/operators';
+import { Injectable, ApplicationRef, signal, inject } from '@angular/core';
+import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
+import { ToastController, Platform } from '@ionic/angular/standalone';
+import { first, filter } from 'rxjs/operators';
 import { concat, interval } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -9,21 +9,25 @@ export class PwaUpdateService {
   // We gebruiken een Signal zodat de UI direct weet of de knop zichtbaar moet zijn
   installPrompt = signal<any>(null);
 
-  constructor(
-    private appRef: ApplicationRef,
-    private updates: SwUpdate,
-    private toastCtrl: ToastController,
-    private platform: Platform
-  ) {
+  // Moderne injectie in plaats van een volle constructor
+  private appRef = inject(ApplicationRef);
+  private updates = inject(SwUpdate);
+  private toastCtrl = inject(ToastController);
+  private platform = inject(Platform);
+
+  constructor() {
     // 1. Luister naar installatie mogelijkheid (Android/Chrome)
     this.initInstallPrompt();
 
-    // 2. Update logica (die hadden we al)
+    // 2. Update logica
     if (this.updates.isEnabled) {
       this.checkForUpdates();
+
       const appIsStable$ = this.appRef.isStable.pipe(first(isStable => isStable === true));
       const everySixHours$ = interval(6 * 60 * 60 * 1000);
+
       concat(appIsStable$, everySixHours$).subscribe(() => this.updates.checkForUpdate());
+
       this.listenForUpdates();
     }
   }
@@ -48,7 +52,7 @@ export class PwaUpdateService {
       return;
     }
 
-    // Toon de native Android prompt
+    // Toon de native Android/Chrome prompt
     promptEvent.prompt();
 
     // Wacht op de keuze van de gebruiker
@@ -59,27 +63,36 @@ export class PwaUpdateService {
     this.installPrompt.set(null);
   }
 
-
-  // --- UPDATE LOGICA (ongewijzigd) ---
+  // --- UPDATE LOGICA ---
 
   public checkForUpdates() {
-    if(this.updates.isEnabled) this.updates.checkForUpdate();
+    if (this.updates.isEnabled) {
+      this.updates.checkForUpdate();
+    }
   }
 
   private listenForUpdates() {
-    this.updates.versionUpdates.subscribe(evt => {
-      if (evt.type === 'VERSION_READY') this.presentUpdateToast();
-    });
+    this.updates.versionUpdates
+      .pipe(filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY'))
+      .subscribe(() => {
+        this.presentUpdateToast();
+      });
   }
 
   private async presentUpdateToast() {
     const toast = await this.toastCtrl.create({
       header: 'Update beschikbaar',
-      message: 'Nieuwe versie wordt geladen...',
+      message: 'Een nieuwe, verbeterde versie is gedownload. Installeer nu.',
       position: 'bottom',
       color: 'primary',
-      duration: 5000,
-      buttons: [{ text: 'OK', role: 'cancel', handler: () => document.location.reload() }]
+      duration: 0, // Belangrijk: De melding blijft nu staan tot er geklikt wordt!
+      buttons: [{
+        text: 'UPDATE NU',
+        role: 'cancel', // Verbergt de toast na de klik
+        handler: () => {
+          this.updates.activateUpdate().then(() => document.location.reload());
+        }
+      }]
     });
     await toast.present();
   }
