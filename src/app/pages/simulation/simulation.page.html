@@ -7,6 +7,25 @@
 
     <ion-title>Pacemaker Simulator</ion-title>
 
+    <ion-buttons slot="end">
+
+      <!-- Realism toggle -->
+      <ion-button (click)="realismMode = !realismMode">
+        <ion-icon
+          [name]="realismMode ? 'flask' : 'flask-outline'"
+          [color]="realismMode ? 'warning' : 'medium'">
+        </ion-icon>
+      </ion-button>
+
+      <!-- Pause / Play -->
+      <ion-button (click)="toggleRun()" color="light">
+  <ion-icon
+    [name]="isRunning ? 'pause' : 'play'">
+  </ion-icon>
+</ion-button>
+
+    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
@@ -15,8 +34,11 @@
   <div class="monitor-frame">
 
     <div class="monitor-label">
-      LEAD I — {{ mode }}
-    </div>
+  LEAD I — {{ mode }}
+  <span class="status-tag" *ngIf="realismMode">SIM+</span>
+  <span class="status-tag paused" *ngIf="!isRunning">PAUSE</span>
+</div>
+
 
     <div *ngIf="eventLabel" class="event-overlay">
       {{ eventLabel }}

@@ -101,3 +101,12 @@ ion-range {
 }
 
 /* Rest van je simulation CSS (monitor-frame, kaarten, etc) behouden zoals je had */
+.status-tag {
+  margin-left: 8px;
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.status-tag.paused {
+  color: var(--ion-color-warning);
+}

@@ -21,22 +21,26 @@ import { pause, play, flask, flaskOutline, pulse, chevronBack, arrowBack, square
   imports: [
     CommonModule, FormsModule,
     IonContent, IonHeader, IonToolbar, IonTitle,
-    IonButtons, IonIcon, IonBackButton, IonRange
+    IonButtons, IonButton, IonIcon, IonBackButton, IonRange
   ]
 })
 export class SimulationPage implements OnDestroy {
   @ViewChild('ecgCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
 
+  // Instellingen
   bpm = 60;
   output = 5;
   sensitivity = 2;
+  realismMode = false;
 
-  // DOO is hier netjes toegevoegd aan de types
+  // Status
   mode: 'SIM' | 'VVI' | 'VOO' | 'AAI' | 'DDD' | 'DOO' = 'SIM';
   isRunning = true;
+  isTesting = false;
   eventLabel = '';
   private eventTimeout: any;
 
+  // Canvas & Loop
   private ctx!: CanvasRenderingContext2D;
   private animationFrameId: any;
   private dataPoints: number[] = [];
@@ -45,11 +49,10 @@ export class SimulationPage implements OnDestroy {
 
   private highlightSpike = false;
   private highlightQRS = false;
-  realismMode: any;
-  isTesting: any;
-  captureThreshold: number = 0;
-  testInterval: any;
-rate: any;
+
+  // Threshold Test
+  captureThreshold = 0;
+  private testInterval: any;
 
   constructor(private router: Router) {
     const nav = this.router.getCurrentNavigation();
@@ -71,6 +74,10 @@ rate: any;
   ngOnDestroy() {
     this.stopTest();
     if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
+  }
+
+  toggleRun(): void {
+    this.isRunning = !this.isRunning;
   }
 
   // ======================
