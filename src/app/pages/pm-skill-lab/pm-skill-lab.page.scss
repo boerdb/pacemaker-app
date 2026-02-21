@@ -1,0 +1,112 @@
+.monitor-frame {
+  background: #000;
+  border-radius: 16px;
+  padding: 10px;
+  margin-bottom: 15px;
+  box-shadow: 0 0 15px rgba(0, 255, 100, 0.1);
+}
+
+.monitor-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+  color: #0f0;
+}
+
+.mode-badge {
+  font-weight: bold;
+  color: var(--ion-color-warning);
+}
+
+.canvas-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+canvas {
+  width: 100%;
+  height: 180px;
+  display: block;
+}
+
+.art-line {
+  margin-top: 6px;
+}
+
+.training-objective {
+  border-left: 4px solid var(--ion-color-warning);
+}
+
+.feedback-card {
+  margin-top: 15px;
+  transition: 0.3s;
+}
+
+.feedback-card.error {
+  border-left: 4px solid var(--ion-color-danger);
+}
+
+.feedback-card.success {
+  border-left: 4px solid var(--ion-color-success);
+}
+
+.objective-text,
+.feedback-text {
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+
+/* ================= NATIVE DROPDOWN ================= */
+.scenario-dropdown-container {
+  position: relative;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.scenario-dropdown {
+  width: 100%;
+  padding: 14px 15px;
+  background-color: #2a2a2a;
+  color: white;
+  border: 1px solid #444;
+  border-radius: 8px;
+  font-size: 1rem;
+  /* Verbergt het standaard browser-pijltje zodat we onze eigen kunnen tonen */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  outline: none;
+}
+
+.scenario-dropdown:focus {
+  border-color: var(--ion-color-warning);
+}
+
+.dropdown-arrow {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ion-color-warning);
+  /* Essentieel: zorgt dat je niet per ongeluk het pijltje selecteert maar de lijst opent */
+  pointer-events: none;
+  font-size: 0.8rem;
+}
+
+.selected-scenario-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  color: var(--ion-color-success);
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.scenario-warning {
+  margin-top: 8px;
+  color: var(--ion-color-danger);
+  font-size: 0.85rem;
+  font-style: italic;
+}

@@ -83,3 +83,13 @@ ion-toolbar {
   /* Forceer een minimale dikte van 60px! */
   min-height: calc(60px + var(--ion-safe-area-top, 0px)) !important;
 }
+
+/* Ensure action-sheet used by ion-select is visible and above other elements in PWAs */
+.pm-select-action-sheet {
+  z-index: 99999 !important;
+}
+
+/* Safe-area padding for action-sheet on iOS PWAs */
+.pm-select-action-sheet .action-sheet-group {
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+}

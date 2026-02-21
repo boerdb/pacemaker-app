@@ -31,4 +31,8 @@ export const routes: Routes = [
     path: 'modes/mode-detail/:id',
     loadComponent: () => import('./pages/modes/mode-detail/mode-detail.page').then( m => m.ModeDetailPage)
   },
+  {
+    path: 'pm-skill-lab',
+    loadComponent: () => import('./pages/pm-skill-lab/pm-skill-lab.page').then( m => m.PmSkillLabPage)
+  },
 ];

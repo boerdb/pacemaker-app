@@ -21,6 +21,8 @@ import {
   play,
   cloudDownloadOutline,
   download,
+  school,
+  checkmarkCircleOutline,
 
 } from 'ionicons/icons';
 
@@ -34,6 +36,7 @@ export const APP_ICONS = {
   'settings': settings,
   'information-circle': informationCircle,
   'close': close,
+  'school': school,
 
   // Pacemaker Specifiek
   'pacing': flash,          // Voor de elektrische puls
@@ -63,4 +66,5 @@ export const APP_ICONS = {
   'play': play,
   'cloud-download': cloudDownloadOutline,
   'download': download,
+  'checkmark-circle': checkmarkCircleOutline,
 };

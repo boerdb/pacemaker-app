@@ -1,0 +1,136 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>
+      Pacemaster Skill Lab
+      <div style="font-size: 0.7rem; opacity: 0.6;">
+        Capture & Sensing Training
+      </div>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleRun()" color="light">
+        <ion-icon [name]="isRunning ? 'pause' : 'play'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- ================= MONITOR ================= -->
+
+  <div class="monitor-frame">
+
+    <div class="monitor-header">
+      <div>HR {{ displayedHR }}</div>
+      <div>MAP {{ displayedMAP }}</div>
+      <div>SpO₂ 98%</div>
+      <div class="mode-badge">{{ mode }}</div>
+    </div>
+
+    <div class="canvas-container">
+      <canvas #ecgCanvas></canvas>
+    </div>
+
+    <div class="canvas-container art-line">
+      <canvas #artCanvas></canvas>
+    </div>
+
+  </div>
+
+  <!-- ================= LEERDOEL ================= -->
+
+  <div class="pm-card training-objective">
+    <div class="pm-row">
+      <ion-icon name="school" color="warning"></ion-icon>
+      <span class="pm-label">Leerdoel</span>
+    </div>
+    <div class="objective-text">
+      {{ currentObjective }}
+    </div>
+  </div>
+
+  <!-- ================= SCENARIO SELECT - NATIVE DROPDOWN ================= -->
+
+  <div class="pm-card">
+    <div class="pm-row">
+      <span class="pm-label">Kies een Scenario</span>
+    </div>
+
+    <!-- NATIVE HTML DROPDOWN - 100% WERKING GEGARANDEERD -->
+    <div class="scenario-dropdown-container">
+      <select
+        aria-label="Kies een scenario"
+        [(ngModel)]="selectedScenario"
+        (change)="loadScenario()"
+        class="scenario-dropdown"
+        [class.selected]="selectedScenario">
+
+        <option value="" disabled selected>-- Selecteer een scenario --</option>
+        <option value="vvi_brady">VVI: Brady</option>
+        <option value="vvi_under">VVI: Under</option>
+        <option value="vvi_over">VVI: Over</option>
+        <option value="ddd_p">DDD: P-Top</option>
+        <option value="asystole">Asystolie</option>
+        <option value="total_block">Totaal AV</option>
+        <option value="unpaced_total_block">Ongepaced Totaal Blok</option>
+      </select>
+      <div class="dropdown-arrow">▼</div>
+    </div>
+
+    <!-- Toon geselecteerd scenario voor extra feedback -->
+
+
+    <!-- Optioneel: kleine visuele indicator van het type scenario -->
+    <div *ngIf="selectedScenario === 'asystole'" class="scenario-warning">
+      ⚠️ Let op: Asystolie is een kritiek scenario
+    </div>
+  </div>
+
+  <!-- ================= SETTINGS ================= -->
+
+  <div class="pm-card">
+    <div class="pm-row">
+      <span class="pm-label">Lower Rate</span>
+      <span class="pm-value">{{ lowerRate }} bpm</span>
+    </div>
+    <ion-range min="30" max="120" step="5" [(ngModel)]="lowerRate"></ion-range>
+  </div>
+
+  <div class="pm-card">
+    <div class="pm-row">
+      <span class="pm-label">Output</span>
+      <span class="pm-value">{{ output }} mA</span>
+    </div>
+    <ion-range min="0" max="10" step="0.5" [(ngModel)]="output"></ion-range>
+  </div>
+
+  <div class="pm-card">
+    <div class="pm-row">
+      <span class="pm-label">Sensitivity</span>
+      <span class="pm-value">{{ sensitivity }} mV</span>
+    </div>
+    <ion-range min="0.5" max="5" step="0.1" [(ngModel)]="sensitivity"></ion-range>
+  </div>
+
+  <!-- ================= FEEDBACK ================= -->
+
+  <div class="pm-card feedback-card" [ngClass]="feedbackType">
+    <div class="pm-row">
+      <ion-icon
+        [name]="feedbackType === 'error' ? 'warning' : 'success'"
+        [color]="feedbackType === 'error' ? 'danger' : 'success'">
+      </ion-icon>
+      <span class="pm-label">Feedback</span>
+    </div>
+
+    <div class="feedback-text">
+      {{ feedbackMessage }}
+    </div>
+  </div>
+
+</ion-content>

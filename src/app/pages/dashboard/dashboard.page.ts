@@ -12,7 +12,8 @@ import {
   settings,
   list,
   chevronForward,
-  medkit
+  medkit,
+  school
 } from 'ionicons/icons';
 
 @Component({
@@ -52,7 +53,8 @@ export class DashboardPage {
       settings,
       list,
       chevronForward,
-      medkit
+      medkit,
+      school
     });
   }
 }
