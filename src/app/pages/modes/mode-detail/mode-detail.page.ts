@@ -52,7 +52,7 @@ export class ModeDetailPage implements OnInit {
   }
 
   openSimulator() {
-    this.router.navigate(['/simulation'], {
+    this.router.navigate(['/tabs/simulation'], {
       state: { mode: this.modeId }
     });
   }

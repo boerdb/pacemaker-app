@@ -1,16 +1,12 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-title>
-      <div style="font-size: 0.8rem; opacity: 0.7;">CONNECTED TO:</div>
+      <div style="font-size: 0.7rem; opacity: 0.5; letter-spacing: 0.08em;">GESIMULEERD APPARAAT</div>
       {{ deviceInfo.model }}
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button routerLink="/settings" color="medium">
-        <ion-icon slot="icon-only" name="settings"></ion-icon>
-      </ion-button>
-
-      <ion-button color="success">
-        <ion-icon slot="icon-only" name="wifi"></ion-icon>
+      <ion-button color="medium" disabled>
+        <ion-icon slot="icon-only" name="wifi-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -29,25 +25,25 @@
         <div class="text-subtle" style="margin-top: 4px;">Est. longevity: {{ batteryStatus.eol }}</div>
       </div>
       <div style="text-align: right;">
-        <span class="pm-label">Current Mode</span>
+        <span class="pm-label">Simulatiemodus</span>
         <div style="font-size: 1.5rem; font-weight: 800; color: var(--ion-color-primary);">{{ deviceInfo.mode }}</div>
       </div>
     </div>
   </div>
 
-  <div class="section-title">Lead I (Ventricular) Status</div>
+  <div class="section-title">Lead I (Ventriculair) — Gesimuleerd</div>
 
   <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
     <div class="pm-card" style="text-align: center; padding: 12px 5px;">
       <span class="pm-label" style="font-size: 0.65rem;">Imp (Ω)</span>
       <div style="font-size: 1.2rem; font-weight: bold; margin-top: 5px;">{{ leadStatus.impedance }}</div>
-      <div style="font-size: 0.7rem; color: var(--ion-color-success);">NORMAL</div>
+      <div style="font-size: 0.7rem; color: var(--ion-color-success);">NORMAAL</div>
     </div>
 
     <div class="pm-card" style="text-align: center; padding: 12px 5px;">
       <span class="pm-label" style="font-size: 0.65rem;">Sense (mV)</span>
       <div style="font-size: 1.2rem; font-weight: bold; margin-top: 5px;">{{ leadStatus.sensing }}</div>
-      <div style="font-size: 0.7rem; color: var(--ion-color-success);">STABLE</div>
+      <div style="font-size: 0.7rem; color: var(--ion-color-success);">STABIEL</div>
     </div>
 
     <div class="pm-card" style="text-align: center; padding: 12px 5px;">
@@ -57,9 +53,9 @@
     </div>
   </div>
 
-  <div class="section-title">Programmer & Settings</div>
+  <div class="section-title">Snelle toegang</div>
 
-  <div class="pm-card-interactive" routerLink="/simulation" style="margin-bottom: 12px;">
+  <div class="pm-card-interactive" routerLink="/tabs/simulation" style="margin-bottom: 12px;">
     <div style="display: flex; align-items: center;">
       <div style="background: rgba(47, 223, 117, 0.15); padding: 12px; border-radius: 12px; margin-right: 15px;">
         <ion-icon name="pulse" color="success" style="font-size: 24px;"></ion-icon>
@@ -72,29 +68,28 @@
     </div>
   </div>
 
-  <div class="pm-card-interactive" routerLink="/pm-skill-lab" style="margin-bottom: 12px;">
-  <div style="display: flex; align-items: center;">
-    <div style="background: rgba(255, 196, 9, 0.15); padding: 12px; border-radius: 12px; margin-right: 15px;">
-      <ion-icon name="school" color="warning" style="font-size: 24px;"></ion-icon>
-    </div>
-    <div>
-      <div style="font-weight: bold; font-size: 1.05rem;">Pacemaster Skill Lab</div>
-      <div class="text-subtle" style="font-size: 0.85rem;">
-        Capture & sensing training scenarios
+  <div class="pm-card-interactive" routerLink="/tabs/skill-lab" style="margin-bottom: 12px;">
+    <div style="display: flex; align-items: center;">
+      <div style="background: rgba(255, 196, 9, 0.15); padding: 12px; border-radius: 12px; margin-right: 15px;">
+        <ion-icon name="school" color="warning" style="font-size: 24px;"></ion-icon>
       </div>
+      <div>
+        <div style="font-weight: bold; font-size: 1.05rem;">PaceMaster Skill Lab</div>
+        <div class="text-subtle" style="font-size: 0.85rem;">
+          Capture & sensing training scenarios
+        </div>
+      </div>
+      <ion-icon name="chevron-forward" slot="end" style="margin-left: auto; opacity: 0.3;"></ion-icon>
     </div>
-    <ion-icon name="chevron-forward" slot="end" style="margin-left: auto; opacity: 0.3;"></ion-icon>
   </div>
-</div>
 
-
-  <div class="pm-card-interactive" routerLink="/modes/mode-list">
+  <div class="pm-card-interactive" routerLink="/tabs/modes">
     <div style="display: flex; align-items: center;">
       <div style="background: rgba(56, 128, 255, 0.15); padding: 12px; border-radius: 12px; margin-right: 15px;">
         <ion-icon name="medkit" color="primary" style="font-size: 24px;"></ion-icon>
       </div>
       <div>
-        <div style="font-weight: bold; font-size: 1.05rem;">Pacemaker Modes</div>
+        <div style="font-weight: bold; font-size: 1.05rem;">Pacemaker Modi</div>
         <div class="text-subtle" style="font-size: 0.85rem;">VVI, DDD, AAI Encyclopedia</div>
       </div>
       <ion-icon name="chevron-forward" slot="end" style="margin-left: auto; opacity: 0.3;"></ion-icon>

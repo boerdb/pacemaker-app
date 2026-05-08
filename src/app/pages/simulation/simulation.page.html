@@ -2,7 +2,7 @@
   <ion-toolbar>
 
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/dashboard"></ion-back-button>
     </ion-buttons>
 
     <ion-title>Pacemaker Simulator</ion-title>
@@ -19,10 +19,8 @@
 
       <!-- Pause / Play -->
       <ion-button (click)="toggleRun()" color="light">
-  <ion-icon
-    [name]="isRunning ? 'pause' : 'play'">
-  </ion-icon>
-</ion-button>
+        <ion-icon [name]="isRunning ? 'pause' : 'play'"></ion-icon>
+      </ion-button>
 
     </ion-buttons>
 
@@ -31,14 +29,41 @@
 
 <ion-content class="ion-padding">
 
+  <!-- MODE SELECTOR -->
+  <div class="pm-card" style="padding: 10px 8px;">
+    <div class="pm-row" style="border: none; padding-bottom: 6px; padding-top: 0;">
+      <span class="pm-label">Pacemaker Modus</span>
+      <span class="pm-value" style="font-size: 0.8rem;">{{ mode }}</span>
+    </div>
+    <ion-segment [(ngModel)]="mode" (ionChange)="onModeChange()" scrollable>
+      <ion-segment-button value="SIM">
+        <ion-label>SIM</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="VVI">
+        <ion-label>VVI</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="AAI">
+        <ion-label>AAI</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="DDD">
+        <ion-label>DDD</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="DOO">
+        <ion-label>DOO</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="VOO">
+        <ion-label>VOO</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
   <div class="monitor-frame">
 
     <div class="monitor-label">
-  LEAD I — {{ mode }}
-  <span class="status-tag" *ngIf="realismMode">SIM+</span>
-  <span class="status-tag paused" *ngIf="!isRunning">PAUSE</span>
-</div>
-
+      LEAD I — {{ mode }}
+      <span class="status-tag" *ngIf="realismMode">SIM+</span>
+      <span class="status-tag paused" *ngIf="!isRunning">PAUSE</span>
+    </div>
 
     <div *ngIf="eventLabel" class="event-overlay">
       {{ eventLabel }}

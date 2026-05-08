@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/dashboard"></ion-back-button>
     </ion-buttons>
     <ion-title>Pacemaker Modi</ion-title>
   </ion-toolbar>
@@ -9,19 +9,11 @@
 
 <ion-content class="ion-padding">
 
-  <ion-button expand="block"
-            fill="outline"
-            (click)="openSimulator()"
-            style="margin-bottom:16px;">
-  Ga naar simulator
-</ion-button>
-
-
   <div class="section-title">Veelgebruikt</div>
 
   <div *ngFor="let m of modes"
        class="pm-card-interactive"
-       [routerLink]="['/modes/mode-detail', m.id]">
+       [routerLink]="['/tabs/modes/detail', m.id]">
 
     <div class="pm-row" style="border:none; padding-bottom: 0;">
       <div style="display:flex; align-items:center;">

@@ -6,7 +6,8 @@ import { Router } from '@angular/router';
 // 1. Expliciete imports voor standalone
 import {
   IonContent, IonHeader, IonToolbar, IonTitle,
-  IonButtons, IonButton, IonIcon, IonBackButton, IonRange
+  IonButtons, IonButton, IonIcon, IonBackButton, IonRange,
+  IonSegment, IonSegmentButton, IonLabel
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
@@ -21,7 +22,8 @@ import { pause, play, flask, flaskOutline, pulse, chevronBack, arrowBack, square
   imports: [
     CommonModule, FormsModule,
     IonContent, IonHeader, IonToolbar, IonTitle,
-    IonButtons, IonButton, IonIcon, IonBackButton, IonRange
+    IonButtons, IonButton, IonIcon, IonBackButton, IonRange,
+    IonSegment, IonSegmentButton, IonLabel
   ]
 })
 export class SimulationPage implements OnDestroy {
@@ -78,6 +80,12 @@ export class SimulationPage implements OnDestroy {
 
   toggleRun(): void {
     this.isRunning = !this.isRunning;
+  }
+
+  onModeChange(): void {
+    this.beatQueue = [];
+    this.lastBeatTime = 0;
+    this.showEvent(`MODUS: ${this.mode}`);
   }
 
   // ======================

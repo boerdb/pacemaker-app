@@ -23,7 +23,7 @@ export class ModeListPage {
   }
 
   openSimulator() {
-    this.router.navigate(['/simulation'], { state: { mode: 'SIM' } });
+    this.router.navigate(['/tabs/simulation'], { state: { mode: 'SIM' } });
   }
 
   // De data voor onze lijst
